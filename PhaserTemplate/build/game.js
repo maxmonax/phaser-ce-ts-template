@@ -59,8 +59,6 @@ var PhaserTemplate;
                         this.game.device.iPhone ||
                         this.game.device.iPhone4 ||
                         this.game.device.iPad ||
-                        this.game.device.macOS ||
-                        this.game.device.safari ||
                         this.game.device.mobileSafari;
                 this.time.events.add(100, this.onWaitComplete, this);
             };
@@ -120,17 +118,12 @@ var PhaserTemplate;
             }
             Preloader.prototype.preload = function () {
                 SndMng.init(this.game, true);
-                var sndFormat = 'ogg';
-                if (Params.isIOS && this.game.device.m4a) {
-                    sndFormat = 'm4a';
-                }
-                else if (this.game.device.ie && this.game.device.mp3) {
-                    sndFormat = 'mp3';
-                }
                 var sndFiles = SndMng.LOAD_SOUNDS;
                 for (var i = 0; i < sndFiles.length; i++) {
-                    var sndAddr = './assets/sounds/' + sndFormat + '/' + sndFiles[i] + '.' + sndFormat;
-                    this.load.audio(sndFiles[i], sndAddr);
+                    var ogg = './assets/sounds/ogg/' + sndFiles[i] + '.ogg';
+                    var mp3 = './assets/sounds/mp3/' + sndFiles[i] + '.mp3';
+                    var m4a = './assets/sounds/m4a/' + sndFiles[i] + '.m4a';
+                    this.load.audio(sndFiles[i], [ogg, mp3, m4a]);
                 }
             };
             Preloader.prototype.create = function () {

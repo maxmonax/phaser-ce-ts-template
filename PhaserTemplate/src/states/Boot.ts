@@ -25,8 +25,6 @@
 				this.game.device.iPhone ||
 				this.game.device.iPhone4 ||
 				this.game.device.iPad ||
-				this.game.device.macOS ||
-				this.game.device.safari ||
 				this.game.device.mobileSafari;
 
 			// little pause
