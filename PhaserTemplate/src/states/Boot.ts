@@ -23,9 +23,9 @@
 			
 			LogMng.debug('debug log demo');
 			LogMng.info('info log demo');
-			LogMng.warning('warning log demo');
+			LogMng.warn('warning log demo');
 			LogMng.error('error log demo');
-			LogMng.network('net log demo');
+			LogMng.net('net log demo');
 
 			// FILL PARAMS
 			Params.isIOS = //true || // uncomment for testing

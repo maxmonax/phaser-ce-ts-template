@@ -58,9 +58,9 @@ var PhaserTemplate;
                 LogMng.system('current log mode: ' + LogMng.getMode());
                 LogMng.debug('debug log demo');
                 LogMng.info('info log demo');
-                LogMng.warning('warning log demo');
+                LogMng.warn('warning log demo');
                 LogMng.error('error log demo');
-                LogMng.network('net log demo');
+                LogMng.net('net log demo');
                 Params.isIOS =
                     this.game.device.iOS ||
                         this.game.device.iPhone ||
@@ -240,14 +240,14 @@ var LogMng;
         log(aMsg, INFO);
     }
     LogMng.info = info;
-    function network(aMsg) {
+    function net(aMsg) {
         log(aMsg, NETWORK);
     }
-    LogMng.network = network;
-    function warning(aMsg) {
+    LogMng.net = net;
+    function warn(aMsg) {
         log(aMsg, WARNING);
     }
-    LogMng.warning = warning;
+    LogMng.warn = warn;
     function error(aMsg) {
         log(aMsg, ERROR);
     }

@@ -94,12 +94,12 @@
 	export function info(aMsg: string) {
 		log(aMsg, INFO);
 	}
-
-	export function network(aMsg: string) {
+	
+	export function net(aMsg: string) {
 		log(aMsg, NETWORK);
 	}
 
-	export function warning(aMsg: string) {
+	export function warn(aMsg: string) {
 		log(aMsg, WARNING);
 	}
 
