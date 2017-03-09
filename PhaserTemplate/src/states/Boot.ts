@@ -6,18 +6,26 @@
 		}
 
 		create() {
-			this.stage.setBackgroundColor(0xDDDDDD);
-
+			this.stage.setBackgroundColor(0xCCCCCC);
 			this.input.maxPointers = 1;
-
 			// если true то игра старается не останавливаться теряя фокус
 			this.stage.disableVisibilityChange = true;
+
+			// CREDITS in console
+			LogMng.system('Created by MonaxGames studio', 'http://monaxgames.com');
 
 			// SCALE MNG
 			ScaleManager.init(this.game, Config.DOM_PARENT_ID, Config.GW, Config.GH, Config.GSW, Config.GSH);
 
-			// CREDITS in console
-			LogMng.logSystem('Created by MonaxGames studio', 'http://monaxgames.com');
+			// LogMng settings
+			LogMng.setMode(LogMng.MODE_DEBUG);
+			LogMng.system('current log mode: ' + LogMng.getMode());
+			
+			LogMng.debug('debug log demo');
+			LogMng.info('info log demo');
+			LogMng.warning('warning log demo');
+			LogMng.error('error log demo');
+			LogMng.network('net log demo');
 
 			// FILL PARAMS
 			Params.isIOS = //true || // uncomment for testing

@@ -49,11 +49,18 @@ var PhaserTemplate;
             Boot.prototype.preload = function () {
             };
             Boot.prototype.create = function () {
-                this.stage.setBackgroundColor(0xDDDDDD);
+                this.stage.setBackgroundColor(0xCCCCCC);
                 this.input.maxPointers = 1;
                 this.stage.disableVisibilityChange = true;
+                LogMng.system('Created by MonaxGames studio', 'http://monaxgames.com');
                 ScaleManager.init(this.game, Config.DOM_PARENT_ID, Config.GW, Config.GH, Config.GSW, Config.GSH);
-                LogMng.logSystem('Created by MonaxGames studio', 'http://monaxgames.com');
+                LogMng.setMode(LogMng.MODE_DEBUG);
+                LogMng.system('current log mode: ' + LogMng.getMode());
+                LogMng.debug('debug log demo');
+                LogMng.info('info log demo');
+                LogMng.warning('warning log demo');
+                LogMng.error('error log demo');
+                LogMng.network('net log demo');
                 Params.isIOS =
                     this.game.device.iOS ||
                         this.game.device.iPhone ||
@@ -151,12 +158,30 @@ var States;
 })(States || (States = {}));
 var LogMng;
 (function (LogMng) {
-    LogMng.DEBUG = 'DEBUG';
-    LogMng.INFO = 'INFO';
-    LogMng.NETWORK = 'NETWORK';
-    LogMng.WARNING = 'WARNING';
-    LogMng.ERROR = 'ERROR';
-    LogMng.levels = [LogMng.DEBUG, LogMng.INFO, LogMng.NETWORK, LogMng.WARNING, LogMng.ERROR];
+    LogMng.MODE_DEBUG = 'MODE_DEBUG';
+    LogMng.MODE_RELEASE = 'MODE_RELEASE';
+    var DEBUG = 'DEBUG';
+    var INFO = 'INFO';
+    var NETWORK = 'NETWORK';
+    var WARNING = 'WARNING';
+    var ERROR = 'ERROR';
+    var mode = LogMng.MODE_DEBUG;
+    var levels = [DEBUG, INFO, NETWORK, WARNING, ERROR];
+    function setMode(aMode) {
+        switch (aMode) {
+            case LogMng.MODE_DEBUG:
+                levels = [DEBUG, INFO, NETWORK, WARNING, ERROR];
+                break;
+            case LogMng.MODE_RELEASE:
+                levels = [WARNING, ERROR];
+                break;
+        }
+    }
+    LogMng.setMode = setMode;
+    function getMode() {
+        return mode;
+    }
+    LogMng.getMode = getMode;
     function getCSS(bgColor) {
         return 'background: ' + bgColor + ';' +
             'background-repeat: no-repeat;' +
@@ -177,36 +202,56 @@ var LogMng;
             'line-height: 14px';
     }
     ;
-    function logSystem(message, link) {
-        console.log("%c %c %c %s %c %c %c %c%s", getCSS('#5C6166'), getCSS('#4F5357'), getCSS('#313335'), message, getCSS('#4F5357'), getCSS('#5C6166'), getLink('none'), getLink('none'), link);
-    }
-    LogMng.logSystem = logSystem;
-    function log(message, level) {
-        if (level === void 0) { level = LogMng.DEBUG; }
-        if (LogMng.levels.indexOf(level) < 0)
+    function log(aMsg, aLevel) {
+        if (aLevel === void 0) { aLevel = DEBUG; }
+        if (levels.indexOf(aLevel) < 0)
             return;
         var css = '';
-        switch (level) {
-            case LogMng.INFO:
+        switch (aLevel) {
+            case INFO:
                 css = 'background: #308AE4; color: #fff; padding: 1px 4px';
                 break;
-            case LogMng.WARNING:
+            case WARNING:
                 css = 'background: #f7a148; color: #fff; padding: 1px 4px';
                 break;
-            case LogMng.ERROR:
+            case ERROR:
                 css = 'background: #DB5252; color: #fff; padding: 1px 4px';
                 break;
-            case LogMng.NETWORK:
+            case NETWORK:
                 css = 'background: #7D2998; color: #fff; padding: 1px 4px';
                 break;
-            case LogMng.DEBUG:
+            case DEBUG:
             default:
                 css = 'background: #ADADAD; color: #fff; padding: 1px 4px';
         }
-        console.log("%c%s", css, level, message);
+        console.log("%c%s", css, aLevel, aMsg);
     }
-    LogMng.log = log;
     ;
+    function system(aMsg, aLink) {
+        if (aLink === void 0) { aLink = ''; }
+        console.log("%c %c %c %s %c %c %c %c%s", getCSS('#5C6166'), getCSS('#4F5357'), getCSS('#313335'), aMsg, getCSS('#4F5357'), getCSS('#5C6166'), getLink('none'), getLink('none'), aLink);
+    }
+    LogMng.system = system;
+    function debug(aMsg) {
+        log(aMsg, DEBUG);
+    }
+    LogMng.debug = debug;
+    function info(aMsg) {
+        log(aMsg, INFO);
+    }
+    LogMng.info = info;
+    function network(aMsg) {
+        log(aMsg, NETWORK);
+    }
+    LogMng.network = network;
+    function warning(aMsg) {
+        log(aMsg, WARNING);
+    }
+    LogMng.warning = warning;
+    function error(aMsg) {
+        log(aMsg, ERROR);
+    }
+    LogMng.error = error;
 })(LogMng || (LogMng = {}));
 var MyMath;
 (function (MyMath) {

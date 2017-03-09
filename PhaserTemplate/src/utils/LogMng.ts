@@ -1,11 +1,32 @@
 ﻿namespace LogMng {
-	export const DEBUG = 'DEBUG';
-	export const INFO = 'INFO';
-	export const NETWORK = 'NETWORK';
-	export const WARNING = 'WARNING';
-	export const ERROR = 'ERROR';
+	export const MODE_DEBUG = 'MODE_DEBUG';
+	export const MODE_RELEASE = 'MODE_RELEASE';
 
-	export var levels: Array<string> = [DEBUG, INFO, NETWORK, WARNING, ERROR];
+	const DEBUG = 'DEBUG';
+	const INFO = 'INFO';
+	const NETWORK = 'NETWORK';
+	const WARNING = 'WARNING';
+	const ERROR = 'ERROR';
+
+	// current mode
+	var mode: string = MODE_DEBUG;
+	// available levels
+	var levels: Array<string> = [DEBUG, INFO, NETWORK, WARNING, ERROR];
+
+	export function setMode(aMode: string) {
+		switch (aMode) {
+			case MODE_DEBUG:
+				levels = [DEBUG, INFO, NETWORK, WARNING, ERROR];
+				break;
+			case MODE_RELEASE:
+				levels = [WARNING, ERROR];
+				break;
+		}
+	}
+
+	export function getMode(): string {
+		return mode;
+	}
 
 	function getCSS(bgColor: string): string {
 		return 'background: ' + bgColor + ';' +
@@ -26,22 +47,13 @@
 			'color: #446d96;' +
 			'line-height: 14px';
 	};
-
-	export function logSystem(message: string, link: string) {
-		console.log("%c %c %c %s %c %c %c %c%s",
-			getCSS('#5C6166'), getCSS('#4F5357'),
-			getCSS('#313335'), message,
-			getCSS('#4F5357'), getCSS('#5C6166'),
-			getLink('none'), getLink('none'), link
-		);
-	}
-
-	export function log(message: string, level: string = DEBUG) {
-		if (levels.indexOf(level) < 0)
+	
+	function log(aMsg: string, aLevel: string = DEBUG) {
+		if (levels.indexOf(aLevel) < 0)
 			return;
 
 		var css = '';
-		switch (level) {
+		switch (aLevel) {
 			case INFO:
 				css = 'background: #308AE4; color: #fff; padding: 1px 4px';
 				break;
@@ -63,6 +75,36 @@
 				css = 'background: #ADADAD; color: #fff; padding: 1px 4px';
 		}
 
-		console.log("%c%s", css, level, message);
+		console.log("%c%s", css, aLevel, aMsg);
 	};
+
+	export function system(aMsg: string, aLink: string = '') {
+		console.log("%c %c %c %s %c %c %c %c%s",
+			getCSS('#5C6166'), getCSS('#4F5357'),
+			getCSS('#313335'), aMsg,
+			getCSS('#4F5357'), getCSS('#5C6166'),
+			getLink('none'), getLink('none'), aLink
+		);
+	}
+
+	export function debug(aMsg: string) {
+		log(aMsg, DEBUG);
+	}
+
+	export function info(aMsg: string) {
+		log(aMsg, INFO);
+	}
+
+	export function network(aMsg: string) {
+		log(aMsg, NETWORK);
+	}
+
+	export function warning(aMsg: string) {
+		log(aMsg, WARNING);
+	}
+
+	export function error(aMsg: string) {
+		log(aMsg, ERROR);
+	}
+
 }
