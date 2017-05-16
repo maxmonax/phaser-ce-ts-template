@@ -25,7 +25,7 @@
 	export function toDeg(aRad: number): number {
 		return aRad * 180 / Math.PI;
 	}
-
+	
 	export function IsPointInTriangle(ax, ay, bx, by, cx, cy, px, py: number): boolean {
 		var b0x, b0y, c0x, c0y, p0x, p0y: number;
 		var m, l: number; // мю и лямбда
