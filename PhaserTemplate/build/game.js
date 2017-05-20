@@ -174,8 +174,8 @@ var LogMng;
     var mode = LogMng.MODE_DEBUG;
     var levels = [DEBUG, INFO, NETWORK, WARNING, ERROR];
     function setMode(aMode) {
-        this.mode = aMode;
-        switch (this.mode) {
+        mode = aMode;
+        switch (mode) {
             case LogMng.MODE_DEBUG:
                 levels = [DEBUG, INFO, NETWORK, WARNING, ERROR];
                 break;

@@ -14,8 +14,8 @@
 	var levels: Array<string> = [DEBUG, INFO, NETWORK, WARNING, ERROR];
 
 	export function setMode(aMode: string) {
-		this.mode = aMode;
-		switch (this.mode) {
+		mode = aMode;
+		switch (mode) {
 			case MODE_DEBUG:
 				levels = [DEBUG, INFO, NETWORK, WARNING, ERROR];
 				break;
