@@ -1,4 +1,4 @@
-﻿module PhaserTemplate.Client {
+﻿module PhaserGame.Client {
 
 	export class GameEngine extends Phaser.Game {
 
@@ -16,5 +16,5 @@
 }
 
 window.onload = () => {
-	new PhaserTemplate.Client.GameEngine();
+	new PhaserGame.Client.GameEngine();
 };

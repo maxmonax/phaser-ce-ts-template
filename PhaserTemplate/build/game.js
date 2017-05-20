@@ -20,8 +20,8 @@ var Params;
 (function (Params) {
     Params.isIOS = false;
 })(Params || (Params = {}));
-var PhaserTemplate;
-(function (PhaserTemplate) {
+var PhaserGame;
+(function (PhaserGame) {
     var Client;
     (function (Client) {
         var GameEngine = (function (_super) {
@@ -38,13 +38,13 @@ var PhaserTemplate;
             return GameEngine;
         }(Phaser.Game));
         Client.GameEngine = GameEngine;
-    })(Client = PhaserTemplate.Client || (PhaserTemplate.Client = {}));
-})(PhaserTemplate || (PhaserTemplate = {}));
+    })(Client = PhaserGame.Client || (PhaserGame.Client = {}));
+})(PhaserGame || (PhaserGame = {}));
 window.onload = function () {
-    new PhaserTemplate.Client.GameEngine();
+    new PhaserGame.Client.GameEngine();
 };
-var PhaserTemplate;
-(function (PhaserTemplate) {
+var PhaserGame;
+(function (PhaserGame) {
     var Client;
     (function (Client) {
         var Boot = (function (_super) {
@@ -81,10 +81,10 @@ var PhaserTemplate;
             return Boot;
         }(Phaser.State));
         Client.Boot = Boot;
-    })(Client = PhaserTemplate.Client || (PhaserTemplate.Client = {}));
-})(PhaserTemplate || (PhaserTemplate = {}));
-var PhaserTemplate;
-(function (PhaserTemplate) {
+    })(Client = PhaserGame.Client || (PhaserGame.Client = {}));
+})(PhaserGame || (PhaserGame = {}));
+var PhaserGame;
+(function (PhaserGame) {
     var Client;
     (function (Client) {
         var Game = (function (_super) {
@@ -99,10 +99,10 @@ var PhaserTemplate;
             return Game;
         }(Phaser.State));
         Client.Game = Game;
-    })(Client = PhaserTemplate.Client || (PhaserTemplate.Client = {}));
-})(PhaserTemplate || (PhaserTemplate = {}));
-var PhaserTemplate;
-(function (PhaserTemplate) {
+    })(Client = PhaserGame.Client || (PhaserGame.Client = {}));
+})(PhaserGame || (PhaserGame = {}));
+var PhaserGame;
+(function (PhaserGame) {
     var Client;
     (function (Client) {
         var MainMenu = (function (_super) {
@@ -118,10 +118,10 @@ var PhaserTemplate;
             return MainMenu;
         }(Phaser.State));
         Client.MainMenu = MainMenu;
-    })(Client = PhaserTemplate.Client || (PhaserTemplate.Client = {}));
-})(PhaserTemplate || (PhaserTemplate = {}));
-var PhaserTemplate;
-(function (PhaserTemplate) {
+    })(Client = PhaserGame.Client || (PhaserGame.Client = {}));
+})(PhaserGame || (PhaserGame = {}));
+var PhaserGame;
+(function (PhaserGame) {
     var Client;
     (function (Client) {
         var Preloader = (function (_super) {
@@ -153,8 +153,8 @@ var PhaserTemplate;
             return Preloader;
         }(Phaser.State));
         Client.Preloader = Preloader;
-    })(Client = PhaserTemplate.Client || (PhaserTemplate.Client = {}));
-})(PhaserTemplate || (PhaserTemplate = {}));
+    })(Client = PhaserGame.Client || (PhaserGame.Client = {}));
+})(PhaserGame || (PhaserGame = {}));
 var States;
 (function (States) {
     States.BOOT = 'Boot';

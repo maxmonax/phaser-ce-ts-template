@@ -1,4 +1,4 @@
-﻿module PhaserTemplate.Client {
+﻿module PhaserGame.Client {
 
 	export class MainMenu extends Phaser.State {
 		
