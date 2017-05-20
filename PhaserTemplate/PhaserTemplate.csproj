@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -41,6 +41,7 @@
     <TypeScriptCompile Include="src\utils\MyMath.ts" />
     <TypeScriptCompile Include="src\utils\ScaleManager.ts" />
     <TypeScriptCompile Include="src\utils\SndMng.ts" />
+    <TypeScriptCompile Include="src\utils\TextUtils.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">

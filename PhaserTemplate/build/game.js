@@ -1,8 +1,13 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Config;
 (function (Config) {
     Config.DOM_PARENT_ID = 'content';
@@ -22,12 +27,13 @@ var PhaserTemplate;
         var GameEngine = (function (_super) {
             __extends(GameEngine, _super);
             function GameEngine() {
-                _super.call(this, Config.GW, Config.GH, Phaser.AUTO, Config.DOM_PARENT_ID, null);
-                this.state.add(States.BOOT, Client.Boot, false);
-                this.state.add(States.PRELOADER, Client.Preloader, false);
-                this.state.add(States.MAINMENU, Client.MainMenu, false);
-                this.state.add(States.GAME, Client.Game, false);
-                this.state.start(States.BOOT);
+                var _this = _super.call(this, Config.GW, Config.GH, Phaser.AUTO, Config.DOM_PARENT_ID, null) || this;
+                _this.state.add(States.BOOT, Client.Boot, false);
+                _this.state.add(States.PRELOADER, Client.Preloader, false);
+                _this.state.add(States.MAINMENU, Client.MainMenu, false);
+                _this.state.add(States.GAME, Client.Game, false);
+                _this.state.start(States.BOOT);
+                return _this;
             }
             return GameEngine;
         }(Phaser.Game));
@@ -44,7 +50,7 @@ var PhaserTemplate;
         var Boot = (function (_super) {
             __extends(Boot, _super);
             function Boot() {
-                _super.apply(this, arguments);
+                return _super !== null && _super.apply(this, arguments) || this;
             }
             Boot.prototype.preload = function () {
             };
@@ -84,7 +90,7 @@ var PhaserTemplate;
         var Game = (function (_super) {
             __extends(Game, _super);
             function Game() {
-                _super.apply(this, arguments);
+                return _super !== null && _super.apply(this, arguments) || this;
             }
             Game.prototype.create = function () {
             };
@@ -102,7 +108,7 @@ var PhaserTemplate;
         var MainMenu = (function (_super) {
             __extends(MainMenu, _super);
             function MainMenu() {
-                _super.apply(this, arguments);
+                return _super !== null && _super.apply(this, arguments) || this;
             }
             MainMenu.prototype.create = function () {
                 SndMng.fadeInMusic();
@@ -121,7 +127,7 @@ var PhaserTemplate;
         var Preloader = (function (_super) {
             __extends(Preloader, _super);
             function Preloader() {
-                _super.apply(this, arguments);
+                return _super !== null && _super.apply(this, arguments) || this;
             }
             Preloader.prototype.preload = function () {
                 SndMng.init(this.game, true);
@@ -168,7 +174,8 @@ var LogMng;
     var mode = LogMng.MODE_DEBUG;
     var levels = [DEBUG, INFO, NETWORK, WARNING, ERROR];
     function setMode(aMode) {
-        switch (aMode) {
+        this.mode = aMode;
+        switch (this.mode) {
             case LogMng.MODE_DEBUG:
                 levels = [DEBUG, INFO, NETWORK, WARNING, ERROR];
                 break;
@@ -399,12 +406,12 @@ var ScaleManager = (function () {
         }
         setTimeout("window.scrollTo(0,0)", 1000);
     };
-    ScaleManager.dom_id = '';
-    ScaleManager.dtx = 0;
-    ScaleManager.dty = 0;
-    ScaleManager.onOrientationChange = new Phaser.Signal();
     return ScaleManager;
 }());
+ScaleManager.dom_id = '';
+ScaleManager.dtx = 0;
+ScaleManager.dty = 0;
+ScaleManager.onOrientationChange = new Phaser.Signal();
 var SndMng;
 (function (SndMng) {
     SndMng.MUSIC = 'music';
@@ -473,4 +480,60 @@ var SndMng;
     }
     SndMng.sfxClick = sfxClick;
 })(SndMng || (SndMng = {}));
+var TextUtils;
+(function (TextUtils) {
+    function addZero(aNum, aLen) {
+        var text = String(aNum);
+        while (text.length < aLen)
+            text = '0' + text;
+        return text;
+    }
+    TextUtils.addZero = addZero;
+    function sizingBitmapTextByW(aBmpText, aW, aInc, aDec) {
+        if (aBmpText.text == '' || aBmpText.height == 0 || aBmpText.width == 0) {
+            LogMng.debug('TextUtils.ts sizingBitmapTextByW(): aBmpText.text == ""');
+            LogMng.debug('TextUtils.ts sizingBitmapTextByW(): aBmpText.width = ' + aBmpText.width);
+            LogMng.debug('TextUtils.ts sizingBitmapTextByW(): aBmpText.height = ' + aBmpText.height);
+            return;
+        }
+        if (aInc) {
+            if (aBmpText.width < aW) {
+                while (aBmpText.width < aW) {
+                    aBmpText.fontSize++;
+                }
+            }
+        }
+        if (aDec) {
+            if (aBmpText.width > aW) {
+                while (aBmpText.width > aW) {
+                    aBmpText.fontSize--;
+                }
+            }
+        }
+    }
+    TextUtils.sizingBitmapTextByW = sizingBitmapTextByW;
+    function sizingBitmapTextByH(aBmpText, aH, aInc, aDec) {
+        if (aBmpText.text == '' || aBmpText.height == 0 || aBmpText.width == 0) {
+            LogMng.debug('TextUtils.ts sizingBitmapTextByH(): aBmpText.text == ""');
+            LogMng.debug('TextUtils.ts sizingBitmapTextByH(): aBmpText.width = ' + aBmpText.width);
+            LogMng.debug('TextUtils.ts sizingBitmapTextByH(): aBmpText.height = ' + aBmpText.height);
+            return;
+        }
+        if (aInc) {
+            if (aBmpText.height < aH) {
+                while (aBmpText.height < aH) {
+                    aBmpText.fontSize++;
+                }
+            }
+        }
+        if (aDec) {
+            if (aBmpText.height > aH) {
+                while (aBmpText.height > aH) {
+                    aBmpText.fontSize--;
+                }
+            }
+        }
+    }
+    TextUtils.sizingBitmapTextByH = sizingBitmapTextByH;
+})(TextUtils || (TextUtils = {}));
 //# sourceMappingURL=game.js.map

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <UseIISExpress>true</UseIISExpress>
     <ProjectView>ShowAllFiles</ProjectView>
+    <ToolsVersionPromptShown>2.2</ToolsVersionPromptShown>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
