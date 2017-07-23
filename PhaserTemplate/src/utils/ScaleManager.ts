@@ -9,13 +9,8 @@ class ScaleManager {
 	private static game_sw: number;
 	private static game_sh: number;
 
-	// смещение контейнера игры по результатам скейлинга, для центрирования
 	public static dtx: number = 0;
 	public static dty: number = 0;
-
-	// реально видимые ширина и высота в размерах истинного разрешения игры
-	public static gameViewW: number;
-	public static gameViewH: number;
 
 	// orientation
 	public static isPortrait: boolean;
@@ -94,12 +89,6 @@ class ScaleManager {
 		// game dt xy
 		this.dtx = (wnd.w - gw) / 2;
 		this.dty = (wnd.h - gh) / 2;
-
-		this.gameViewW = this.game_w + 2 * this.dtx / newScale;
-		if (this.gameViewW > this.game_w) this.gameViewW = this.game_w;
-
-		this.gameViewH = this.game_h + 2 * this.dty / newScale;
-		if (this.gameViewH > this.game_h) this.gameViewH = this.game_h;
 
 		this.dom.style.marginLeft = Math.round(this.dtx).toString() + 'px';
 		this.dom.style.marginTop = Math.round(this.dty).toString() + 'px';
