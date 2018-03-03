@@ -1,71 +1,71 @@
 class ScaleManager {
-	private static game: Phaser.Game;
-	private static dom_id: string = '';
-	private static dom: HTMLElement;
-	private static isDesktop = false;
-	// game maximum size
-	private static game_w: number;
-	private static game_h: number;
-	// game save area size
-	private static game_sw: number;
-	private static game_sh: number;
+  private static game: Phaser.Game;
+  private static dom_id: string = '';
+  private static dom: HTMLElement;
+  private static isDesktop = false;
+  // game maximum size
+  private static game_w: number;
+  private static game_h: number;
+  // game save area size
+  private static game_sw: number;
+  private static game_sh: number;
 
-	// delta values container position from left and top of the page
-	public static dtx: number = 0;
-	public static dty: number = 0;
+  // delta values container position from left and top of the page
+  public static dtx: number = 0;
+  public static dty: number = 0;
 
-	// true current game view size
-	public static gameViewW: number;
-	public static gameViewH: number;
+  // true current game view size
+  public static gameViewW: number;
+  public static gameViewH: number;
 
-	// orientation
-	public static isPortrait: boolean;
-	public static onOrientationChange: Phaser.Signal = new Phaser.Signal(); // orientation change event
-	
-	public static init(aGame: Phaser.Game, aDomId: string, GW: number, GH: number, GSW: number, GSH: number) {
-		this.game = aGame;
-		this.dom_id = aDomId;
-		this.dom = document.getElementById(this.dom_id);
+  // orientation
+  public static isPortrait: boolean;
+  public static onOrientationChange: Phaser.Signal = new Phaser.Signal(); // orientation change event
 
-		this.game_w = GW;
-		this.game_h = GH;
-		this.game_sw = GSW;
-		this.game_sh = GSH;
+  public static init(aGame: Phaser.Game, aDomId: string, GW: number, GH: number, GSW: number, GSH: number) {
+    this.game = aGame;
+    this.dom_id = aDomId;
+    this.dom = document.getElementById(this.dom_id);
 
-		aGame.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    this.game_w = GW;
+    this.game_h = GH;
+    this.game_sw = GSW;
+    this.game_sh = GSH;
 
-		this.isDesktop = this.game.device.desktop;
-		// TEST
-		//this.isDesktop = false;
+    aGame.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
 
-		ScaleManager.SizeCalculation();
+    this.isDesktop = this.game.device.desktop;
+    // TEST
+    //this.isDesktop = false;
 
-		window.onresize = () => {
-			ScaleManager.SizeCalculation();
-		};
-	}
+    ScaleManager.SizeCalculation();
 
-	private static doEventOriChange() {
-		this.onOrientationChange.dispatch(this.isPortrait);
-	}
+    window.onresize = () => {
+      ScaleManager.SizeCalculation();
+    };
+  }
 
-	public static SizeCalculation() {
-		var wnd = {
-			w: window.innerWidth,
-			h: window.innerHeight
-		};
+  private static doEventOriChange() {
+    this.onOrientationChange.dispatch(this.isPortrait);
+  }
 
-		// orientation
-		var oldOri = this.isPortrait;
-		this.isPortrait = wnd.h > wnd.w;
+  public static SizeCalculation() {
+    var wnd = {
+      w: window.innerWidth,
+      h: window.innerHeight
+    };
 
-		// determine game size
-		var g = {
-			w: ScaleManager.game_w,
-			h: ScaleManager.game_h,
-			sw: ScaleManager.game_sw,
-			sh: ScaleManager.game_sh
-		}
+    // orientation
+    var oldOri = this.isPortrait;
+    this.isPortrait = wnd.h > wnd.w;
+
+    // determine game size
+    var g = {
+      w: ScaleManager.game_w,
+      h: ScaleManager.game_h,
+      sw: ScaleManager.game_sw,
+      sh: ScaleManager.game_sh
+    }
 
     var gw: number;
     var gh: number;
@@ -93,105 +93,104 @@ class ScaleManager {
         gh = gw * g.h / g.w;
       }
     }
-		
-		// game scale
+
+    // game scale
     var scale_x = gw / g.w;
     var scale_y = gh / g.h;
     var newScale = Math.min(scale_x, scale_y);
-		ScaleManager.game.scale.setUserScale(newScale, newScale, 0, 0);
+    ScaleManager.game.scale.setUserScale(newScale, newScale, 0, 0);
 
-		// game dt xy
-		this.dtx = (wnd.w - gw) / 2;
-		this.dty = (wnd.h - gh) / 2;
+    // game dt xy
+    this.dtx = (wnd.w - gw) / 2;
+    this.dty = (wnd.h - gh) / 2;
 
-		this.gameViewW = this.game_w + 2 * this.dtx / newScale;
-		if (this.gameViewW > this.game_w) this.gameViewW = this.game_w;
+    this.gameViewW = this.game_w + 2 * this.dtx / newScale;
+    if (this.gameViewW > this.game_w) this.gameViewW = this.game_w;
 
-		this.gameViewH = this.game_h + 2 * this.dty / newScale;
-		if (this.gameViewH > this.game_h) this.gameViewH = this.game_h;
+    this.gameViewH = this.game_h + 2 * this.dty / newScale;
+    if (this.gameViewH > this.game_h) this.gameViewH = this.game_h;
 
-		// game div position
-		this.dom.style.marginLeft = Math.round(this.dtx).toString() + 'px';
-		
-		if (!this.isDesktop && this.isPortrait) {
-		//if (this.game.device.desktop && this.isPortrait) {
-			this.dom.style.marginTop = '0px';
-		}
-		else {
-			this.dom.style.marginTop = Math.round(this.dty).toString() + 'px';
-		}
+    // game div position
+    this.dom.style.marginLeft = Math.round(this.dtx).toString() + 'px';
 
-		this.dom.style.maxWidth = String(gw) + 'px';
-		this.dom.style.maxHeight = String(gh) + 'px';
+    if (!this.isDesktop && this.isPortrait) {
+      this.dom.style.marginTop = '0px';
+    }
+    else {
+      this.dom.style.marginTop = Math.round(this.dty).toString() + 'px';
+    }
 
-		ScaleManager.game.scale.refresh();
+    this.dom.style.maxWidth = String(gw) + 'px';
+    this.dom.style.maxHeight = String(gh) + 'px';
 
-		// ROTATION ICON UPDATE
-		this.updateRotationIcon();
+    ScaleManager.game.scale.refresh();
 
-		if (this.isPortrait != oldOri) {
-			this.doEventOriChange();
-		}
-	}
+    // ROTATION ICON UPDATE
+    this.updateRotationIcon();
 
-	private static updateRotationIcon() {
-		var MAX_PERC = 24;
+    if (this.isPortrait != oldOri) {
+      this.doEventOriChange();
+    }
+  }
 
-		if (!this.isDesktop) {
-			if (this.isPortrait) {
-				this.showRotateIcon();
-			}
-			else {
-				this.hideRotateIcon();
-				return;
-			}
+  private static updateRotationIcon() {
+    var MAX_PERC = 24;
 
-			var wnd = {
-				w: window.innerWidth,
-				h: window.innerHeight
-			};
+    if (!this.isDesktop) {
+      if (this.isPortrait) {
+        this.showRotateIcon();
+      }
+      else {
+        this.hideRotateIcon();
+        return;
+      }
 
-			var rp_div = document.getElementById("rp-div");
-			var rp_img = document.getElementById("rp-img");
-			var com_h = this.dom.clientHeight + rp_div.clientHeight;
+      var wnd = {
+        w: window.innerWidth,
+        h: window.innerHeight
+      };
 
-			var perc = MAX_PERC;
-			if (rp_img.style.height != null && rp_img.style.height != undefined && rp_img.style.height != '') {
-				if (rp_img.style.height.indexOf('%') > 0)
-					perc = Number(rp_img.style.height.split('%')[0]);
-				//LogMng.debug('perc = ' + perc);
-			}
+      var rp_div = document.getElementById("rp-div");
+      var rp_img = document.getElementById("rp-img");
+      var com_h = this.dom.clientHeight + rp_div.clientHeight;
 
-			if (com_h > wnd.h) {
-				while (com_h > wnd.h) {
-					perc--;
-					rp_img.style.width = rp_img.style.height = String(perc) + '%';
-					com_h = this.dom.clientHeight + rp_div.clientHeight;
-				}
-			}
-			else {
-				while (perc < MAX_PERC && com_h < wnd.h - 10) {
-					perc++;
-					rp_img.style.width = rp_img.style.height = String(perc) + '%';
-					com_h = this.dom.clientHeight + rp_div.clientHeight;
-				}
-			}
+      var perc = MAX_PERC;
+      if (rp_img.style.height != null && rp_img.style.height != undefined && rp_img.style.height != '') {
+        if (rp_img.style.height.indexOf('%') > 0)
+          perc = Number(rp_img.style.height.split('%')[0]);
+        //LogMng.debug('perc = ' + perc);
+      }
 
-			var bot_h = wnd.h - this.dom.clientHeight;
-			rp_div.style.paddingTop = String((bot_h - rp_img.clientHeight) / 2) + 'px';
+      if (com_h > wnd.h) {
+        while (com_h > wnd.h) {
+          perc--;
+          rp_img.style.width = rp_img.style.height = String(perc) + '%';
+          com_h = this.dom.clientHeight + rp_div.clientHeight;
+        }
+      }
+      else {
+        while (perc < MAX_PERC && com_h < wnd.h - 10) {
+          perc++;
+          rp_img.style.width = rp_img.style.height = String(perc) + '%';
+          com_h = this.dom.clientHeight + rp_div.clientHeight;
+        }
+      }
 
-		}
-	}
+      var bot_h = wnd.h - this.dom.clientHeight;
+      rp_div.style.paddingTop = String((bot_h - rp_img.clientHeight) / 2) + 'px';
 
-	private static showRotateIcon() {
-		document.getElementById("rp-div").style.display = "block";
-		//ScaleManager.game.world.isPaused = true;
-	}
+    }
+  }
 
-	private static hideRotateIcon() {
-		document.getElementById("rp-div").style.display = "none";
-		//ScaleManager.game.world.isPaused = false;
-	}
+  private static showRotateIcon() {
+    document.getElementById("rp-div").style.display = "block";
+    //ScaleManager.game.world.isPaused = true;
+  }
+
+  private static hideRotateIcon() {
+    document.getElementById("rp-div").style.display = "none";
+    //ScaleManager.game.world.isPaused = false;
+  }
 
 }
 

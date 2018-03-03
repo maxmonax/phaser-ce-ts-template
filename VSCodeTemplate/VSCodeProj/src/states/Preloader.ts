@@ -40,7 +40,7 @@
 
 		protected onContinueCreate() {
 			// 'tap to start' for iOS
-			if (Params.isMacOS) {
+			if (Params.isTapToStartBtn) {
 				this.dummyLoader.visible = false;
 				var spr = new Phaser.Sprite(this.game, Config.GW / 2, Config.GH / 2, 'game', 'youtube-like-start-icon');
 				spr.anchor.set(0.5);
@@ -53,7 +53,7 @@
 		}
 
 		protected startMainMenu() {
-      if (Params.isMacOS) {
+      if (Params.isTapToStartBtn) {
         SndMng.sfxPlay(SndMng.SFX_CLICK, 0);
       }  
 			this.game.state.start(States.MAINMENU, true, false);

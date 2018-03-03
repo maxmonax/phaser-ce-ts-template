@@ -50,7 +50,7 @@ var DB;
 })(DB || (DB = {}));
 var Params;
 (function (Params) {
-    Params.isMacOS = false;
+    Params.isTapToStartBtn = false;
 })(Params || (Params = {}));
 var PhaserGame;
 (function (PhaserGame) {
@@ -436,8 +436,10 @@ var PhaserGame;
                 this.input.maxPointers = 1;
                 this.stage.disableVisibilityChange = true;
                 ScaleManager.init(this.game, Config.DOM_PARENT_ID, Config.GW, Config.GH, Config.GSW, Config.GSH);
+                if (isRelease())
+                    LogMng.setMode(LogMng.MODE_RELEASE);
                 LogMng.system('current log mode: ' + LogMng.getMode());
-                Params.isMacOS =
+                Params.isTapToStartBtn =
                     this.game.device.iOS ||
                         this.game.device.iPhone ||
                         this.game.device.iPhone4 ||
@@ -538,7 +540,7 @@ var PhaserGame;
                 this.game.time.events.add(1000, this.onContinueCreate, this);
             };
             Preloader.prototype.onContinueCreate = function () {
-                if (Params.isMacOS) {
+                if (Params.isTapToStartBtn) {
                     this.dummyLoader.visible = false;
                     var spr = new Phaser.Sprite(this.game, Config.GW / 2, Config.GH / 2, 'game', 'youtube-like-start-icon');
                     spr.anchor.set(0.5);
@@ -550,7 +552,7 @@ var PhaserGame;
                 }
             };
             Preloader.prototype.startMainMenu = function () {
-                if (Params.isMacOS) {
+                if (Params.isTapToStartBtn) {
                     SndMng.sfxPlay(SndMng.SFX_CLICK, 0);
                 }
                 this.game.state.start(States.MAINMENU, true, false);
