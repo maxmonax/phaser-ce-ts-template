@@ -15,7 +15,7 @@
       ScaleManager.init(this.game, Config.DOM_PARENT_ID, Config.GW, Config.GH, Config.GSW, Config.GSH);
 
       // LogMng settings
-      if (isRelease()) LogMng.setMode(LogMng.MODE_RELEASE);
+      if (IS_RELEASE) LogMng.setMode(LogMng.MODE_RELEASE);
       LogMng.system('current log mode: ' + LogMng.getMode());
 
       // FILL PARAMS

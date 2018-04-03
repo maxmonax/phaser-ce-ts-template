@@ -436,7 +436,7 @@ var PhaserGame;
                 this.input.maxPointers = 1;
                 this.stage.disableVisibilityChange = true;
                 ScaleManager.init(this.game, Config.DOM_PARENT_ID, Config.GW, Config.GH, Config.GSW, Config.GSH);
-                if (isRelease())
+                if (IS_RELEASE)
                     LogMng.setMode(LogMng.MODE_RELEASE);
                 LogMng.system('current log mode: ' + LogMng.getMode());
                 Params.isTapToStartBtn =
@@ -746,6 +746,20 @@ var MyMath;
         return veclen <= r1 + r2;
     }
     MyMath.isCirclesIntersect = isCirclesIntersect;
+    function cartesianToIsometric(cartPt) {
+        var tempPt = new Phaser.Point();
+        tempPt.x = cartPt.x - cartPt.y;
+        tempPt.y = (cartPt.x + cartPt.y) / 2;
+        return tempPt;
+    }
+    MyMath.cartesianToIsometric = cartesianToIsometric;
+    function isometricToCartesian(isoPt) {
+        var tempPt = new Phaser.Point();
+        tempPt.x = (2 * isoPt.y + isoPt.x) / 2;
+        tempPt.y = (2 * isoPt.y - isoPt.x) / 2;
+        return tempPt;
+    }
+    MyMath.isometricToCartesian = isometricToCartesian;
 })(MyMath || (MyMath = {}));
 var ObjAvgValueUtils = (function () {
     function ObjAvgValueUtils(aGame) {
@@ -875,14 +889,14 @@ var ScaleManager = (function () {
         }
         var scale_x = gw / g.w;
         var scale_y = gh / g.h;
-        var newScale = Math.min(scale_x, scale_y);
-        ScaleManager.game.scale.setUserScale(newScale, newScale, 0, 0);
+        this.gameScale = Math.min(scale_x, scale_y);
+        ScaleManager.game.scale.setUserScale(this.gameScale, this.gameScale, 0, 0);
         this.dtx = (wnd.w - gw) / 2;
         this.dty = (wnd.h - gh) / 2;
-        this.gameViewW = this.game_w + 2 * this.dtx / newScale;
+        this.gameViewW = this.game_w + 2 * this.dtx / this.gameScale;
         if (this.gameViewW > this.game_w)
             this.gameViewW = this.game_w;
-        this.gameViewH = this.game_h + 2 * this.dty / newScale;
+        this.gameViewH = this.game_h + 2 * this.dty / this.gameScale;
         if (this.gameViewH > this.game_h)
             this.gameViewH = this.game_h;
         this.dom.style.marginLeft = Math.round(this.dtx).toString() + 'px';
@@ -950,6 +964,9 @@ var ScaleManager = (function () {
     ScaleManager.isDesktop = false;
     ScaleManager.dtx = 0;
     ScaleManager.dty = 0;
+    ScaleManager.gameViewW = 0;
+    ScaleManager.gameViewH = 0;
+    ScaleManager.gameScale = 1;
     ScaleManager.onOrientationChange = new Phaser.Signal();
     return ScaleManager;
 }());
