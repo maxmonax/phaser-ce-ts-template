@@ -15,8 +15,11 @@ class ScaleManager {
   public static dty: number = 0;
 
   // true current game view size
-  public static gameViewW: number;
-  public static gameViewH: number;
+  public static gameViewW = 0;
+  public static gameViewH = 0;
+
+  // true current game scale
+  public static gameScale = 1;
 
   // orientation
   public static isPortrait: boolean;
@@ -97,17 +100,17 @@ class ScaleManager {
     // game scale
     var scale_x = gw / g.w;
     var scale_y = gh / g.h;
-    var newScale = Math.min(scale_x, scale_y);
-    ScaleManager.game.scale.setUserScale(newScale, newScale, 0, 0);
+    this.gameScale = Math.min(scale_x, scale_y);
+    ScaleManager.game.scale.setUserScale(this.gameScale, this.gameScale, 0, 0);
 
     // game dt xy
     this.dtx = (wnd.w - gw) / 2;
     this.dty = (wnd.h - gh) / 2;
 
-    this.gameViewW = this.game_w + 2 * this.dtx / newScale;
+    this.gameViewW = this.game_w + 2 * this.dtx / this.gameScale;
     if (this.gameViewW > this.game_w) this.gameViewW = this.game_w;
 
-    this.gameViewH = this.game_h + 2 * this.dty / newScale;
+    this.gameViewH = this.game_h + 2 * this.dty / this.gameScale;
     if (this.gameViewH > this.game_h) this.gameViewH = this.game_h;
 
     // game div position

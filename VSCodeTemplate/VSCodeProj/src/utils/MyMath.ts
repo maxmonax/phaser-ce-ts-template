@@ -59,4 +59,23 @@
 		return veclen <= r1 + r2;
 	}
 
+  
+  // isometric math =========================================
+
+  // переводит декартовые координаты в изометрические
+  export function cartesianToIsometric(cartPt: any): Phaser.Point {
+    var tempPt = new Phaser.Point();
+    tempPt.x = cartPt.x - cartPt.y;
+    tempPt.y = (cartPt.x + cartPt.y) / 2;
+    return tempPt;
+  }
+
+  // переводит изометрические координаты в декартовые
+  export function isometricToCartesian(isoPt: any): Phaser.Point {
+    var tempPt = new Phaser.Point();
+    tempPt.x = (2 * isoPt.y + isoPt.x) / 2;
+    tempPt.y = (2 * isoPt.y - isoPt.x) / 2;
+    return tempPt;
+  }
+
 }
