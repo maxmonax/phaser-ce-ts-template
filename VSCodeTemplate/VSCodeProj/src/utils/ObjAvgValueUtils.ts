@@ -64,13 +64,13 @@
 	 * Добавления зависимости значения поля объекта от процентов сжатия значений второго объекта.
    * @param aObjVal объект задающий проценты
    * @param aFieldVal поле задающее проценты
-   * @param aMax максимальное значение задающей величины
    * @param aMin минимальное значение задающей величины
+   * @param aMax максимальное значение задающей величины
    * @param aObj зависимый объект
    * @param aField изменяемое поле зависемого объекта
-   * @param aVals массив зависимых значений относительно процентов: [{p: 0, v: 120}, {p: 100, v: 230}]
+   * @param aVals массив зависимых значений относительно процентов задающей величины от aMin(0%) до aMax(100%): [{p: 0, v: 120}, {p: 100, v: 230}]
    */
-  addItemPercVals(aObjVal: any, aFieldVal: string, aMax: number, aMin: number, aObj: any, aField: string, aVals: Array<any>) {
+  addItemPercVals(aObjVal: any, aFieldVal: string, aMin: number, aMax: number, aObj: any, aField: string, aVals: Array<any>) {
     this.itemsPerc.push({ ov: aObjVal, fv: aFieldVal, min: aMin, max: aMax, o: aObj, f: aField, vals: aVals });
   }
 

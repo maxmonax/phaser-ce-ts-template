@@ -187,6 +187,7 @@ class ScaleManager {
 
   private static showRotateIcon() {
     document.getElementById("rp-div").style.display = "block";
+    // if u need a game pause then rotation block, uncomment this
     //ScaleManager.game.world.isPaused = true;
   }
 

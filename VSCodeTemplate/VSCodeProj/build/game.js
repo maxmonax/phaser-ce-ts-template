@@ -1,7 +1,10 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -36,8 +39,8 @@ var Config;
     Config.DOM_PARENT_ID = 'game';
     Config.GW = 2000;
     Config.GH = 960;
-    Config.GSW = 1024;
-    Config.GSH = 768;
+    Config.GSW = 1280;
+    Config.GSH = 900;
     Config.FPS = 12;
 })(Config || (Config = {}));
 var DB;
@@ -488,10 +491,28 @@ var PhaserGame;
                 this.oav = new ObjAvgValueUtils(this.game);
                 this.mainDummy = new Phaser.Sprite(this.game, 0, 0);
                 this.add.existing(this.mainDummy);
+                var fullArea = new Phaser.Graphics(this.game, Config.GW / 2, Config.GH / 2);
+                fullArea.beginFill(0, 0);
+                fullArea.lineStyle(6, 0xAA0000, 1);
+                fullArea.drawRect(-Config.GW / 2, -Config.GH / 2, Config.GW, Config.GH);
+                fullArea.endFill();
+                this.mainDummy.addChild(fullArea);
+                var faText = new Phaser.Text(this.game, 25, 20, 'Full Area: ' + Config.GW + 'x' + Config.GH);
+                faText.addColor('#AA0000', 0);
+                this.mainDummy.addChild(faText);
+                var safeArea = new Phaser.Graphics(this.game, Config.GW / 2, Config.GH / 2);
+                safeArea.beginFill(0, 0);
+                safeArea.lineStyle(6, 0x00AA00, 1);
+                safeArea.drawRect(-Config.GSW / 2, -Config.GSH / 2, Config.GSW, Config.GSH);
+                safeArea.endFill();
+                this.mainDummy.addChild(safeArea);
+                var saText = new Phaser.Text(this.game, Config.GW / 2 - Config.GSW / 2 + 25, Config.GH / 2 - Config.GSH / 2 + 20, 'Full Area: ' + Config.GSW + 'x' + Config.GSH);
+                saText.addColor('#00AA00', 0);
+                this.mainDummy.addChild(saText);
                 this.btnPlay = new Phaser.Button(this.game, Config.GW / 2, Config.GH / 2, 'game', this.onPlayClick, this, 'Button_013', 'Button_013');
                 this.btnPlay.anchor.set(0.5);
                 this.mainDummy.addChild(this.btnPlay);
-                this.oav.addItem(this.btnPlay, 'y', [{ p: 0, v: Config.GH / 2 + 300 }, { p: 100, v: Config.GH / 2 + 250 }]);
+                this.oav.addItemPercVals(ScaleManager, 'gameViewW', Config.GSH, Config.GH, this.btnPlay, 'y', [{ p: 0, v: Config.GH / 2 + 300 }, { p: 100, v: Config.GH / 2 + 250 }]);
                 SndMng.playMusic(SndMng.MUSIC_MENU, 0, 1, 1000);
             };
             MainMenu.prototype.onPlayClick = function () {
@@ -499,7 +520,7 @@ var PhaserGame;
             };
             MainMenu.prototype.update = function () {
                 var dt = this.game.time.elapsed * 0.001;
-                this.oav.update(dt);
+                this.oav.update();
             };
             return MainMenu;
         }(Phaser.State));
@@ -763,69 +784,75 @@ var MyMath;
 })(MyMath || (MyMath = {}));
 var ObjAvgValueUtils = (function () {
     function ObjAvgValueUtils(aGame) {
-        this.gh = Config.GH;
-        this.gsh = Config.GSH;
-        this.press_perc_y = 0;
-        this.itemsYPos = [];
-        this.itemsScale = [];
-        this.itemsUni = [];
+        this.itemsPerc = [];
+        this.itemsVals = [];
         this.updateTimer = 0;
         this.UPD_TIME = 0.1;
         this.game = aGame;
+        this.itemsPerc = [];
+        this.itemsVals = [];
     }
-    ObjAvgValueUtils.prototype.getValue = function (aVals, aPerc) {
+    ObjAvgValueUtils.prototype.getValueFromPerc = function (aVals, aPerc) {
         var res = 0;
         var p = aPerc;
-        var p1 = 0;
-        var v1 = 0;
-        var p2 = 0;
-        var v2 = 0;
+        var minData;
+        var maxData;
         for (var i = 0; i < aVals.length; i++) {
-            if (aVals[i].p <= aPerc) {
-                p1 = aVals[i].p;
-                v1 = aVals[i].v;
+            if (aVals[i].p <= aPerc && (!minData || aVals[i].p > minData.p)) {
+                minData = aVals[i];
             }
-            else {
-                p2 = aVals[i].p;
-                v2 = aVals[i].v;
-                break;
+            if (aVals[i].p > aPerc && (!maxData || aVals[i].p < maxData.p)) {
+                maxData = aVals[i];
             }
         }
-        res = v1 + (v2 - v1) * (p - p1) / (p2 - p1);
+        if (minData && maxData) {
+            var v1 = minData.v;
+            var p1 = minData.p;
+            var v2 = maxData.v;
+            var p2 = maxData.p;
+            res = v1 + (v2 - v1) * (p - p1) / (p2 - p1);
+        }
+        else if (minData) {
+            res = minData.v;
+        }
+        else if (maxData) {
+            res = maxData.v;
+        }
         return res;
     };
-    ObjAvgValueUtils.prototype.getValueFromVals = function (vals) {
-        return this.getValue(vals, this.press_perc_y * 100);
+    ObjAvgValueUtils.prototype.updatePercObj = function (aObjData) {
+        var min = aObjData.min;
+        var max = aObjData.max;
+        var cval = aObjData.ov[aObjData.fv];
+        var perc = 100 * (cval - min) / (max - min);
+        aObjData.o[aObjData.f] = this.getValueFromPerc(aObjData.vals, perc);
     };
-    ObjAvgValueUtils.prototype.addItem = function (aObj, aField, aVals) {
-        this.itemsUni.push({ o: aObj, f: aField, v: aVals });
+    ObjAvgValueUtils.prototype.addItemPercVals = function (aObjVal, aFieldVal, aMin, aMax, aObj, aField, aVals) {
+        this.itemsPerc.push({ ov: aObjVal, fv: aFieldVal, min: aMin, max: aMax, o: aObj, f: aField, vals: aVals });
     };
-    ObjAvgValueUtils.prototype.removeItem = function (aObj) {
-        for (var i = this.itemsUni.length - 1; i >= 0; i--) {
+    ObjAvgValueUtils.prototype.removeItemPerc = function (aObj) {
+        for (var i = this.itemsPerc.length - 1; i >= 0; i--) {
             try {
-                if (this.itemsUni[i]['o'] == aObj)
-                    this.itemsUni.splice(i, 1);
+                if (this.itemsPerc[i]['o'] == aObj)
+                    this.itemsPerc.splice(i, 1);
             }
             catch (e) {
                 LogMng.error('ObjAvgValueUtils.removeItem: ' + e);
             }
         }
     };
-    ObjAvgValueUtils.prototype.update = function (dt) {
-        var gvh = ScaleManager.gameViewH;
-        this.press_perc_y = (this.gh - gvh) / (this.gh - this.gsh);
+    ObjAvgValueUtils.prototype.update = function () {
+        var dt = this.game.time.elapsed * 0.001;
         this.updateTimer -= dt;
         if (this.updateTimer > 0)
             return;
         this.updateTimer = this.UPD_TIME;
-        for (var i = this.itemsUni.length - 1; i >= 0; i--) {
+        for (var i = this.itemsPerc.length - 1; i >= 0; i--) {
             try {
-                var obj = this.itemsUni[i].o;
-                obj[this.itemsUni[i].f] = this.getValueFromVals(this.itemsUni[i].v);
-                obj = null;
+                this.updatePercObj(this.itemsPerc[i]);
             }
             catch (e) {
-                this.itemsUni.splice(i, 1);
+                this.itemsPerc.splice(i, 1);
             }
         }
     };

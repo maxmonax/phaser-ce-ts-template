@@ -3,13 +3,13 @@
 namespace Config {
 	export const DOM_PARENT_ID = 'game';
 	
-	// game true size (4x3)
+	// game full area (GWxGSH =~ 19x9 for iPhone X, because need browser top panel height compensation)
 	export const GW = 2000;
 	export const GH = 960;
 
-	// game safe area (~16x9 because need browser top panel height compensation)
-	export const GSW = 1024;
-  export const GSH = 768;
+	// game safe area (GSWxGH = 4x3 for iPad)
+	export const GSW = 1280;
+  export const GSH = 900;
 
   export const FPS = 12;
 }
