@@ -37,14 +37,14 @@ window.onload = function () {
 var Config;
 (function (Config) {
     Config.DOM_PARENT_ID = 'game';
-    Config.GH = 2000;
-    Config.GW = 960;
-    Config.GSH = 1280;
-    Config.GSW = 900;
+    Config.GW = 2000;
+    Config.GH = 960;
+    Config.GSW = 1280;
+    Config.GSH = 900;
     Config.FPS = 12;
     Config.isLockOrientation = true;
-    Config.lockOrientationMobileOnly = false;
-    Config.lockOrientationLand = false;
+    Config.lockOrientationMobileOnly = true;
+    Config.lockOrientationLand = true;
 })(Config || (Config = {}));
 var DB;
 (function (DB) {
