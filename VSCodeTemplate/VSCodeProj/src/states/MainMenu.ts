@@ -37,7 +37,7 @@
       var saText = new Phaser.Text(this.game,
         Config.GW / 2 - Config.GSW / 2 + 25,
         Config.GH / 2 - Config.GSH / 2 + 20,
-        'Full Area: ' + Config.GSW + 'x' + Config.GSH);
+        'Safe Area: ' + Config.GSW + 'x' + Config.GSH);
       saText.addColor('#00AA00', 0);
       this.mainDummy.addChild(saText);
 

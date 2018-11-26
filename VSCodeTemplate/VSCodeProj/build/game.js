@@ -37,11 +37,14 @@ window.onload = function () {
 var Config;
 (function (Config) {
     Config.DOM_PARENT_ID = 'game';
-    Config.GW = 2000;
-    Config.GH = 960;
-    Config.GSW = 1280;
-    Config.GSH = 900;
+    Config.GH = 2000;
+    Config.GW = 960;
+    Config.GSH = 1280;
+    Config.GSW = 900;
     Config.FPS = 12;
+    Config.isLockOrientation = true;
+    Config.lockOrientationMobileOnly = false;
+    Config.lockOrientationLand = false;
 })(Config || (Config = {}));
 var DB;
 (function (DB) {
@@ -435,7 +438,7 @@ var PhaserGame;
                 this.load.atlasJSONArray('loading', './assets/atlases/loading.png', './assets/atlases/loading.json');
             };
             Boot.prototype.create = function () {
-                this.stage.setBackgroundColor(0x6600CC);
+                this.stage.setBackgroundColor(0xf8b195);
                 this.input.maxPointers = 1;
                 this.stage.disableVisibilityChange = true;
                 ScaleManager.init(this.game, Config.DOM_PARENT_ID, Config.GW, Config.GH, Config.GSW, Config.GSH);
@@ -506,7 +509,7 @@ var PhaserGame;
                 safeArea.drawRect(-Config.GSW / 2, -Config.GSH / 2, Config.GSW, Config.GSH);
                 safeArea.endFill();
                 this.mainDummy.addChild(safeArea);
-                var saText = new Phaser.Text(this.game, Config.GW / 2 - Config.GSW / 2 + 25, Config.GH / 2 - Config.GSH / 2 + 20, 'Full Area: ' + Config.GSW + 'x' + Config.GSH);
+                var saText = new Phaser.Text(this.game, Config.GW / 2 - Config.GSW / 2 + 25, Config.GH / 2 - Config.GSH / 2 + 20, 'Safe Area: ' + Config.GSW + 'x' + Config.GSH);
                 saText.addColor('#00AA00', 0);
                 this.mainDummy.addChild(saText);
                 this.btnPlay = new Phaser.Button(this.game, Config.GW / 2, Config.GH / 2, 'game', this.onPlayClick, this, 'Button_013', 'Button_013');
@@ -926,13 +929,6 @@ var ScaleManager = (function () {
         this.gameViewH = this.game_h + 2 * this.dty / this.gameScale;
         if (this.gameViewH > this.game_h)
             this.gameViewH = this.game_h;
-        this.dom.style.marginLeft = Math.round(this.dtx).toString() + 'px';
-        if (!this.isDesktop && this.isPortrait) {
-            this.dom.style.marginTop = '0px';
-        }
-        else {
-            this.dom.style.marginTop = Math.round(this.dty).toString() + 'px';
-        }
         this.dom.style.maxWidth = String(gw) + 'px';
         this.dom.style.maxHeight = String(gh) + 'px';
         ScaleManager.game.scale.refresh();
@@ -941,44 +937,57 @@ var ScaleManager = (function () {
             this.doEventOriChange();
         }
     };
+    ScaleManager.isRotationLockState = function () {
+        if (!Config.isLockOrientation)
+            return false;
+        if (Config.lockOrientationMobileOnly && this.isDesktop)
+            return false;
+        if (Config.lockOrientationLand && this.isPortrait)
+            return true;
+        if (!Config.lockOrientationLand && !this.isPortrait)
+            return true;
+        return false;
+    };
     ScaleManager.updateRotationIcon = function () {
-        var MAX_PERC = 24;
-        if (!this.isDesktop) {
-            if (this.isPortrait) {
-                this.showRotateIcon();
+        var isLockState = this.isRotationLockState();
+        if (isLockState) {
+            if (Config.lockOrientationLand) {
+                this.dom.style.marginTop = '0px';
+                this.dom.style.marginLeft = Math.round(this.dtx).toString() + 'px';
             }
             else {
-                this.hideRotateIcon();
-                return;
+                this.dom.style.marginTop = Math.round(this.dty).toString() + 'px';
+                this.dom.style.marginLeft = '0px';
             }
-            var wnd = {
-                w: window.innerWidth,
-                h: window.innerHeight
-            };
-            var rp_div = document.getElementById("rp-div");
-            var rp_img = document.getElementById("rp-img");
-            var com_h = this.dom.clientHeight + rp_div.clientHeight;
-            var perc = MAX_PERC;
-            if (rp_img.style.height != null && rp_img.style.height != undefined && rp_img.style.height != '') {
-                if (rp_img.style.height.indexOf('%') > 0)
-                    perc = Number(rp_img.style.height.split('%')[0]);
-            }
-            if (com_h > wnd.h) {
-                while (com_h > wnd.h) {
-                    perc--;
-                    rp_img.style.width = rp_img.style.height = String(perc) + '%';
-                    com_h = this.dom.clientHeight + rp_div.clientHeight;
-                }
-            }
-            else {
-                while (perc < MAX_PERC && com_h < wnd.h - 10) {
-                    perc++;
-                    rp_img.style.width = rp_img.style.height = String(perc) + '%';
-                    com_h = this.dom.clientHeight + rp_div.clientHeight;
-                }
-            }
-            var bot_h = wnd.h - this.dom.clientHeight;
-            rp_div.style.paddingTop = String((bot_h - rp_img.clientHeight) / 2) + 'px';
+            this.showRotateIcon();
+        }
+        else {
+            this.dom.style.marginTop = Math.round(this.dty).toString() + 'px';
+            this.dom.style.marginLeft = Math.round(this.dtx).toString() + 'px';
+            this.hideRotateIcon();
+            return;
+        }
+        var wnd = {
+            w: window.innerWidth,
+            h: window.innerHeight
+        };
+        var rp_div = document.getElementById("rp-div");
+        var rp_img = document.getElementById("rp-img");
+        var com_h = this.dom.clientHeight + rp_div.clientHeight;
+        var imgMaxPercent = 24;
+        if (Config.lockOrientationLand) {
+            imgMaxPercent = 20;
+            rp_img.style.width = rp_img.style.height = String(imgMaxPercent) + '%';
+            this.dom.style['float'] = 'left';
+            rp_div.style.display = 'fixed';
+            rp_div.style.paddingTop = ((wnd.h - rp_img.clientHeight) / 2) + 'px';
+        }
+        else {
+            imgMaxPercent = 20;
+            rp_img.style.width = rp_img.style.height = String(imgMaxPercent) + '%';
+            this.dom.style['float'] = 'left';
+            rp_div.style.display = 'fixed';
+            rp_div.style.paddingTop = ((wnd.h - rp_img.clientHeight) / 2) + 'px';
         }
     };
     ScaleManager.showRotateIcon = function () {
