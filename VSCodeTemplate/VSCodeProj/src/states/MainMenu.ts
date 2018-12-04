@@ -3,6 +3,7 @@
 	export class MainMenu extends Phaser.State {
     private mainDummy: Phaser.Sprite;
     private btnPlay: Phaser.Button;
+    private btnFull: Phaser.Button;
 		private oav: ObjAvgValueUtils;
 
 		create() {
@@ -47,12 +48,26 @@
       this.btnPlay.anchor.set(0.5);
       this.mainDummy.addChild(this.btnPlay);
 
+      this.btnFull = new Phaser.Button(this.game, (Config.GW + Config.GSW) / 2 - 50, (Config.GH - Config.GSH) / 2 + 50, 'game',
+        () => { 
+          if (this.game.scale.isFullScreen) {
+            this.game.scale.stopFullScreen();
+          }
+          else {
+            this.game.scale.startFullScreen(false);
+          }
+        }, this, 'Button_158', 'Button_158');
+      this.btnFull.anchor.set(0.5);
+      this.btnFull.scale.set(0.6);
+      this.btnFull.angle = 45;
+      this.mainDummy.addChild(this.btnFull);
+
       this.oav.addItemPercVals(ScaleManager, 'gameViewW', Config.GSH, Config.GH, this.btnPlay, 'y', [{ p: 0, v: Config.GH / 2 + 300 }, { p: 100, v: Config.GH / 2 + 250 }])
 
 			SndMng.playMusic(SndMng.MUSIC_MENU, 0, 1, 1000);
 		}
 
-		private onPlayClick() {
+    private onPlayClick() {
       this.game.state.start(States.GAME, true, false);
 		}
 

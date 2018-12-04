@@ -491,6 +491,7 @@ var PhaserGame;
                 return _super !== null && _super.apply(this, arguments) || this;
             }
             MainMenu.prototype.create = function () {
+                var _this = this;
                 this.oav = new ObjAvgValueUtils(this.game);
                 this.mainDummy = new Phaser.Sprite(this.game, 0, 0);
                 this.add.existing(this.mainDummy);
@@ -515,6 +516,18 @@ var PhaserGame;
                 this.btnPlay = new Phaser.Button(this.game, Config.GW / 2, Config.GH / 2, 'game', this.onPlayClick, this, 'Button_013', 'Button_013');
                 this.btnPlay.anchor.set(0.5);
                 this.mainDummy.addChild(this.btnPlay);
+                this.btnFull = new Phaser.Button(this.game, (Config.GW + Config.GSW) / 2 - 50, (Config.GH - Config.GSH) / 2 + 50, 'game', function () {
+                    if (_this.game.scale.isFullScreen) {
+                        _this.game.scale.stopFullScreen();
+                    }
+                    else {
+                        _this.game.scale.startFullScreen(false);
+                    }
+                }, this, 'Button_158', 'Button_158');
+                this.btnFull.anchor.set(0.5);
+                this.btnFull.scale.set(0.6);
+                this.btnFull.angle = 45;
+                this.mainDummy.addChild(this.btnFull);
                 this.oav.addItemPercVals(ScaleManager, 'gameViewW', Config.GSH, Config.GH, this.btnPlay, 'y', [{ p: 0, v: Config.GH / 2 + 300 }, { p: 100, v: Config.GH / 2 + 250 }]);
                 SndMng.playMusic(SndMng.MUSIC_MENU, 0, 1, 1000);
             };
@@ -872,7 +885,8 @@ var ScaleManager = (function () {
         this.game_h = GH;
         this.game_sw = GSW;
         this.game_sh = GSH;
-        aGame.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
         this.isDesktop = this.game.device.desktop;
         ScaleManager.SizeCalculation();
         window.onresize = function () {
@@ -883,6 +897,9 @@ var ScaleManager = (function () {
         this.onOrientationChange.dispatch(this.isPortrait);
     };
     ScaleManager.SizeCalculation = function () {
+        if (this.game.scale.isFullScreen) {
+            return;
+        }
         var wnd = {
             w: window.innerWidth,
             h: window.innerHeight

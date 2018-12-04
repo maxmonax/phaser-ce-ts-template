@@ -161,6 +161,14 @@
 	"sourceSize": {"w":128,"h":128}
 },
 {
+	"filename": "Button_158",
+	"frame": {"x":135,"y":741,"w":128,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
+	"sourceSize": {"w":128,"h":128}
+},
+{
 	"filename": "youtube-like-start-icon",
 	"frame": {"x":2,"y":2,"w":285,"h":202},
 	"rotated": false,
@@ -169,12 +177,12 @@
 	"sourceSize": {"w":291,"h":208}
 }],
 "meta": {
-	"app": "http://www.codeandweb.com/texturepacker",
+	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "game.png",
 	"format": "RGBA8888",
 	"size": {"w":1024,"h":1024},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:4f9d0a3ee9eb6f2310f7e485ae09a46e:bb631c7bcc7861c3f3d889b9ba1fb7fc:fc2835210f98bae8e8c1b7f0a84c9321$"
+	"smartupdate": "$TexturePacker:SmartUpdate:17b07cf4be1c7f8c42f579ffa4d255dc:c5f28dbec5f58ee2d8ccd8a8b5275e6a:fc2835210f98bae8e8c1b7f0a84c9321$"
 }
 }

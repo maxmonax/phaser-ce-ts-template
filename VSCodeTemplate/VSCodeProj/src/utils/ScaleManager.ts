@@ -35,7 +35,9 @@ class ScaleManager {
     this.game_sw = GSW;
     this.game_sh = GSH;
 
-    aGame.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    //this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.USER_SCALE;
+    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
 
     this.isDesktop = this.game.device.desktop;
     // TEST
@@ -53,6 +55,12 @@ class ScaleManager {
   }
 
   public static SizeCalculation() {
+    //*
+    if (this.game.scale.isFullScreen) {
+      return;
+    }
+    //*/
+
     var wnd = {
       w: window.innerWidth,
       h: window.innerHeight
