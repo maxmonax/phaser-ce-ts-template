@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, 
+    maximum-scale=1.0, minimum-scale=1.0, target-densitydpi=device-dpi" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <title>Phaser-CE VSCode Template</title>
+
+  <style>
+    @font-face {
+      font-family: VAGzStarBold;
+      src: url('assets/fonts/vrzb.eot');
+      src: url('assets/fonts/vrzb.eot?#iefix') format('eot'),
+      url('assets/fonts/vrzb.woff') format('woff'),
+      url('assets/fonts/vrzb.ttf') format('truetype'),
+      url('assets/fonts/vrzb.svg') format('svg');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    html {
+      overflow: hidden;
+    }
+
+    body {
+      background-color: #355c7d;
+      font-family: 'Segoe UI', sans-serif;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #game {
+      margin: 0;
+      padding: 0;
+    }
+
+    #rp-div {
+      padding-top: 10px;
+      display: none;
+    }
+
+    #rp-img {
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      width: 24%;
+      height: 24%;
+    }
+  </style>
+  
+  <script>
+    const IS_RELEASE = false;
+  </script>
+  
+  <script src="js/phaser.min.js"></script>
+  <script src="game.js"></script>
+</head>
+
+<body>
+  <div class="font_preload hidden">
+    <span style="font-family: VAGzStarBold;"></span>
+  </div>
+
+  <div id="game"></div>
+
+  <div id="rp-div">
+    <img id="rp-img" src="assets/sprites/rotate-phone-icon-white.png" />
+  </div>
+
+</body>
+
+</html>

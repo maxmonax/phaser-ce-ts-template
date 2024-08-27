@@ -1,0 +1,16 @@
+{
+  "name": "phaser-ce-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/GameEngine.ts",
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -p . --watch",
+    "static-server": "static-server build -p 9080 --open"
+  },
+  "author": "Monax",
+  "license": "ISC",
+  "dependencies": {
+    "phaser-ce": "^2.20.0"
+  }
+}

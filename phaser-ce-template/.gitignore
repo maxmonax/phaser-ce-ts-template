@@ -1,0 +1,8 @@
+.vs
+bin
+obj
+build/game.js
+build/*.map
+
+node_modules
+package-lock.json
